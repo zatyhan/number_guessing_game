@@ -10,17 +10,12 @@ if [[ -z $USER_ID ]]
 then 
   INSERT_USER=$($PSQL "INSERT INTO users(username) VALUES ('$username')")
   USER_ID=$($PSQL "SELECT user_id from users WHERE username='$username'")
-
-  # echo $($PSQL "INSERT INTO users(username) VALUES ('$username') RETURNING user_id") | while read USER_ID INSERT INTO X Y; do echo $USER_ID; done
-  # echo $($PSQL "SELECT user_id FROM user_activity WHERE username='$username'") | while read USER_ID; do echo $USER_ID; done
-  echo $USER_ID
-  echo "Welcome, $username! It looks like this is your first time here."
+  # USER_ID= $(echo $($PSQL "INSERT INTO users(username) VALUES ('$username') RETURNING user_id") | awk '{print $1}')
+  echo "Welcome, $username! It looks like this is your first time here. Your id is $USER_ID."
 else 
   NUM_GAMES=$($PSQL "SELECT COUNT(game_id) FROM games_played WHERE user_id=$USER_ID")
   BEST_GAME=$($PSQL "SELECT MIN(guesses) FROM games_played WHERE user_id=$USER_ID")
-  echo -e "\nWelcome back, $username! You have played $NUM_GAMES games, and your best game took $BEST_GAME guesses."
-  # echo -e "\nWelcome back, $username! You have played $games_played games, and your best game took 0 guesses."
-  # echo -e "\nWelcome back, $username! You have played $games_played games, and your best game took $best_game guesses."
+  echo -e "\nWelcome back, $username! You have played $NUM_GAMES games, and your best game took $BEST_GAME guesses. "
 fi
 
 INIT_GAME=$($PSQL "INSERT INTO games_played(user_id) VALUES ($USER_ID)")
