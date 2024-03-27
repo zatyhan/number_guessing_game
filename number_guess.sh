@@ -15,3 +15,25 @@ else
   best_game=$($PSQL "SELECT best_game FROM user_activity WHERE username='$username'")
   echo "Welcome back, $username! You have played $games_played games, and your best game took $best_game guesses."
 fi
+
+random_number=$((RANDOM % (1000 - 1 + 1) + 1))
+echo Guess the secret number between 1 and 1000:
+read guess
+echo $random_number
+
+while [ ! $guess == $random_number ];
+do 
+  if [[ ! $guess =~ ^[0-9]+$ ]]
+  then 
+    echo "This is not an integer, guess again:"
+    read guess
+  elif [[ $guess > $random_number ]]
+  then 
+    echo "It's lower than that, guess again:"
+    read guess
+  else [[ $guess < $random_number ]]
+    echo "It's higher than that, guess again:"
+    read guess
+  fi
+done
+
