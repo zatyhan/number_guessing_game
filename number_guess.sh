@@ -40,3 +40,10 @@ do
 done
 
 echo -e "\nYou guessed it in $num_guess tries. The secret number was $random_number. Nice job!"
+
+if [[ $num_guess < $best_game ]]
+then 
+  UPDATE_BEST_GAME=$($PSQL "UPDATE user_activity SET best_game=$num_guess WHERE username='$username'")
+fi 
+games_played=$((games_played+1))
+UPDATE_GAMES_PLAYED=$($PSQL "UPDATE user_activity SET games_played=$games_played WHERE username='$username'")
